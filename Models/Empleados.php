@@ -1,5 +1,5 @@
 <?php
-    require_once "../Connection/Conexion.php";
+    // require_once "../Connection/Conexion.php";
 
     class Empleados extends Conexion{
         public function Crear($data){

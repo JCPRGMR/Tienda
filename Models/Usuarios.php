@@ -1,5 +1,5 @@
 <?php
-    require_once "../Connection/Conexion.php";
+    // require_once "../Connection/Conexion.php";
     class Usuarios extends Conexion{
         public function Crear($data){
             try {
@@ -70,7 +70,7 @@
                 $stmt->bindParam(1, $data["nom_usuario"], PDO::PARAM_STR);
                 $stmt->execute();
                 $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                return (!$resultado) ? true : false ;
+                return ($resultado) ? true : false ;
             } catch (PDOException $th) {
                 die ("Error: " . $th);
             }

@@ -1,9 +1,12 @@
 <?php
     class Conexion{
-        private string $localhost = "172.30.158.100";
+        private string $localhost = "localhost";
+        // private string $localhost = "172.30.158.100";
         private string $database = "tienda";
-        private string $username = "Mastevale2";
-        private string $password = "Ikaros1@";
+        private string $username = "root";
+        private string $password = "";
+        // private string $username = "Mastevale2";
+        // private string $password = "Ikaros1@";
 
         public function Conectar (){
             try {

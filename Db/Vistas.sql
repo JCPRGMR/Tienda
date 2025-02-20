@@ -1,4 +1,4 @@
--- Active: 1740008239233@@127.0.0.1@3306@tienda
+-- Active: 1717701438658@@127.0.0.1@3306@tienda
 -- SELECT * FROM empleados;
 
 
@@ -8,6 +8,6 @@ AS
 SELECT * FROM empleados 
 INNER JOIN usuarios ON empleados.id_empleado = usuarios.id_fk_empleado;
 
-SELECT * FROM view_empleados_usuarios
+-- SELECT * FROM view_empleados_usuarios
 
-SELECT * FROM empleados;
+-- SELECT * FROM empleados;
