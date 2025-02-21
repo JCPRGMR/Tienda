@@ -1,4 +1,4 @@
--- Active: 1717701438658@@127.0.0.1@3306@tienda
+-- Active: 1740008239233@@127.0.0.1@3306@tienda
 -- SELECT * FROM empleados;
 
 

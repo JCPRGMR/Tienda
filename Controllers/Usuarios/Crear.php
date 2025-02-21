@@ -29,6 +29,39 @@
     $empleados = new Empleados();
     $validar = $usuarios->EsRepetido($post);
 
-    echo json_encode ([
-        "message" => $validar ? "Usuario repetido" : "Usuario no repetido"
-    ]);
+    if($validar){
+        echo json_encode([
+            "message" => "Ese usuario ya existe!"
+        ]);
+        exit();
+    }
+
+    $empleado_repetido = $empleados->Identificacion_repetida($post);    // $empleado_repetido = (1 - N) : false
+
+    if(!$empleado_repetido){
+        // Creacion de empleado
+        $empleados->Crear($post);
+        $id_empleado = $empleados->Ultimo_empleado();
+        $post["id_fk_empleado"] = $id_empleado;
+    }
+
+    if($empleado_repetido && $usuarios->Usuario_asignado([$post["identificacion"] => $empleado_repetido])){
+        echo json_encode([
+            "message" => "Ese empleado ya posee un usuario"
+        ]);
+        exit();
+    }
+
+    $post["id_fk_empleado"] = $empleado_repetido;
+
+
+    try {
+        $usuarios->Crear($post);
+        echo json_encode([
+            "message" => "Usuario creado correctamente"
+        ]);
+    } catch (PDOException $th) {
+        echo json_encode([
+            "message" => $th->getMessage()
+        ]);
+    }

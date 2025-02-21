@@ -1,3 +1,4 @@
+-- Active: 1740008239233@@127.0.0.1@3306@tienda
 DROP DATABASE IF EXISTS TIENDA;
 CREATE DATABASE TIENDA;
 USE TIENDA;
@@ -23,6 +24,7 @@ CREATE TABLE clientes (
 -- Tabla: Empleados
 CREATE TABLE empleados (
     id_empleado INT PRIMARY KEY AUTO_INCREMENT,
+    identificacion VARCHAR(100) NOT NULL,
     nom_empleado VARCHAR(255),
     ape_empleado VARCHAR(255),
     celular VARCHAR(15),
@@ -73,7 +75,7 @@ CREATE TABLE usuarios (
     nom_usuario VARCHAR(50) UNIQUE,
     clave VARCHAR(255),
     rol VARCHAR(100),
-    estado TINYINT,
+    estado TINYINT NOT NULL DEFAULT 1,
     id_fk_empleado INT UNIQUE,
     usuario_create DATETIME DEFAULT CURRENT_TIMESTAMP,
     usuario_update DATETIME ON UPDATE CURRENT_TIMESTAMP,

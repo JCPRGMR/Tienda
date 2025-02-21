@@ -14,11 +14,11 @@
                 $stmt->bindParam(1, $data["nom_usuario"], PDO::PARAM_STR);
                 $stmt->bindParam(2, $data["clave"], PDO::PARAM_STR);
                 $stmt->bindParam(3, $data["rol"], PDO::PARAM_STR);
-                $stmt->bindParam(4, $data["id_fk_usuario"], PDO::PARAM_STR);
+                $stmt->bindParam(4, $data["id_fk_empleado"], PDO::PARAM_STR);
                 $stmt->execute();
                 return "Usuario Creado exitosamente";
             } catch (PDOException $th) {
-                die ("Error: " . $th);
+                die ("Error de escritura: " . $th->getMessage());
             }
         }
         public function Leer(){
@@ -29,7 +29,7 @@
                 $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 return $resultado;
             } catch (PDOException $th) {
-                die ("Error: " . $th);
+                die ("Error de lectura: " . $th->getMessage());
             }
         }
         public function Actualizar($data){
@@ -49,7 +49,7 @@
                 $stmt->execute();
                 return "Usuario actualizado correctamente";
             } catch (PDOException $th) {
-                die ("Error: " . $th);
+                die ("Error de actualizacion: " . $th->getMessage());
             }
         }
         public function Eliminar($data){
@@ -60,7 +60,7 @@
                 $stmt->execute();
                 return "Usuario elimniado Correctamente";
             } catch (PDOException $th) {
-                echo ("Error: " . $th);
+                echo ("Error de eliminacion: " . $th);
             }
         }
         public function EsRepetido($data){
@@ -72,7 +72,7 @@
                 $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 return ($resultado) ? true : false ;
             } catch (PDOException $th) {
-                die ("Error: " . $th);
+                die ("Error de repeticion: " . $th->getMessage());
             }
         }
         public function Desactivar($data){
@@ -84,7 +84,7 @@
                 $stmt->execute();
                 return "Usuario inhabilitado Correctamente";
             } catch (PDOException $th) {
-                echo ("Error: " . $th);
+                echo ("Error de desactivacion: " . $th);
             }
         }
         public function VerificarUsuarios($data){
@@ -101,7 +101,19 @@
                     die ("Usuario no encontrado");
                 }
             } catch (PDOException $th) {
-                die ("Error: " . $th);
+                die ("Error de verificacion: " . $th->getMessage());
+            }
+        }
+        public function Usuario_asignado($data){
+            try {
+                $query = "SELECT id_fk_empleado FROM view_empleados_usuarios WHERE identificacion = ?";
+                $stmt = $this->Conectar()->prepare($query);
+                $stmt->bindParam(1, $data["identificacion"], PDO::PARAM_STR);
+                $stmt->execute();
+                $resultado = $stmt->fetchColumn();
+                return $resultado;
+            } catch (PDOException $th) {
+                die ("Error de verifiacion de asignacion: " . $th);
             }
         }
     }
