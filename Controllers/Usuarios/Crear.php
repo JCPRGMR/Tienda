@@ -10,50 +10,37 @@
 
     if($_SERVER["REQUEST_METHOD"] !== "POST"){
         http_response_code(405);
-        json_encode([
-            "Error" => "Metodo de entrada no permitido"
-        ]);
-        exit();
+        exit(json_encode(["Error" => "Metodo de entrada no permitido"]));
     }
-    
-    // Lectura de json
+
+    // Read json
     $post = json_decode(file_get_contents("php://input"), true);
 
     if (!$post) {
         http_response_code(400);
-        echo json_encode(["message" => "Datos JSON inválidos"]);
-        exit();
+        exit(json_encode(["message" => "Datos JSON inválidos"]));
     }
 
+    // Instaciacion
     $usuarios = new Usuarios();
     $empleados = new Empleados();
-    $validar = $usuarios->EsRepetido($post);
 
-    if($validar){
-        echo json_encode([
-            "message" => "Ese usuario ya existe!"
-        ]);
-        exit();
+    // nom_usuario ??
+    if($usuarios->EsRepetido($post)){
+        exit(json_encode(["message" => "Ese usuario ya existe!"]));
     }
 
-    $empleado_repetido = $empleados->Identificacion_repetida($post);    // $empleado_repetido = (1 - N) : false
+    // Empleado con usuario
+    if ($usuarios->Usuario_asignado($post)) {
+        exit(json_encode(["message" => "Ese empleado ya posee un usuario"]));
+    }
 
-    if(!$empleado_repetido){
-        // Creacion de empleado
+    // Id_fk_empleado
+    $post["id_fk_empleado"] = $empleados->Identificacion_repetida($post);
+    if(!$post["id_fk_empleado"]){
         $empleados->Crear($post);
-        $id_empleado = $empleados->Ultimo_empleado();
-        $post["id_fk_empleado"] = $id_empleado;
+        $post["id_fk_empleado"] = $empleados->Ultimo_empleado();
     }
-
-    if($empleado_repetido && $usuarios->Usuario_asignado([$post["identificacion"] => $empleado_repetido])){
-        echo json_encode([
-            "message" => "Ese empleado ya posee un usuario"
-        ]);
-        exit();
-    }
-
-    $post["id_fk_empleado"] = $empleado_repetido;
-
 
     try {
         $usuarios->Crear($post);
